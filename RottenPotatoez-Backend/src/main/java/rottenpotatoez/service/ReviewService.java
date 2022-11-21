@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional;
 import rottenpotatoez.dao.ReviewRepository;
 import rottenpotatoez.dto.ReviewDTO;
 import rottenpotatoez.model.Review;
+import rottenpotatoez.utils.Conversions;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,28 +18,10 @@ public class ReviewService {
     private UserService userService;
     private MovieService movieService;
 
-    public Review createReview(ReviewDTO reviewDTO){
-        Review review = new Review();
-        review.setTitle(reviewDTO.getTitle());
-        review.setRating(reviewDTO.getRating());
-        review.setDescription(reviewDTO.getDescription());
-        review.setUser(userService.getUser(reviewDTO.getUser().getUsername()));
-        review.setMovie(movieService.getMovie(reviewDTO.getMovie().getId()));
-        return reviewRepository.save(review);
-    }
-
-    public Review editReview(ReviewDTO reviewDTO){
-        Review review = getReview(reviewDTO.getId());
-        if(reviewDTO.getTitle() != null && !reviewDTO.getTitle().isEmpty()){
-            review.setTitle(reviewDTO.getTitle());
-        }
-        if(reviewDTO.getRating() > 0 && reviewDTO.getRating() <= 5){
-            review.setRating(reviewDTO.getRating());
-        }
-        if(reviewDTO.getDescription() != null && !reviewDTO.getDescription().isEmpty()){
-            review.setDescription(reviewDTO.getDescription());
-        }
-        return reviewRepository.save(review);
+    public Review createOrEditReview(ReviewDTO reviewDTO){
+        Review review = Conversions.convertToModel(reviewDTO);
+        reviewRepository.save(review);
+        return review;
     }
 
     public Review getReview(UUID id){

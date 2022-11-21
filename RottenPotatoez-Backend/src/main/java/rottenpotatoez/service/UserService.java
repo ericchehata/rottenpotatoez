@@ -15,11 +15,7 @@ public class UserService {
 
     private UserRepository userRepository;
 
-    public User createUser(UserDTO userDTO){
-        return userRepository.save(Conversions.convertToModel(userDTO));
-    }
-
-    public User editUser(UserDTO userDTO){
+    public User createOrEditUser(UserDTO userDTO){
         return userRepository.save(Conversions.convertToModel(userDTO));
     }
 
