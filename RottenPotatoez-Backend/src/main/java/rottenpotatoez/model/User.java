@@ -1,5 +1,7 @@
 package rottenpotatoez.model;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,13 +19,19 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-    @Id
+    @Id @NotBlank
     private String username;
+    @NotBlank
     private String password;
+    @NotBlank
     private String firstName;
+    @NotBlank
     private String lastName;
+    @NotNull
     private LocalDate dateOfBirth;
+    @NotBlank
     private String email;
+    @NotBlank
     private String picture;
     private boolean isAdmin;
 }

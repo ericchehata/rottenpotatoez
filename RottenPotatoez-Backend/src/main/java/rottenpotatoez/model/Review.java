@@ -1,5 +1,9 @@
 package rottenpotatoez.model;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,13 +18,16 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Review {
-    @Id
+    @Id @NotNull
     private UUID id;
+    @NotBlank
     private String title;
-    private int rating;
+    @NotBlank
     private String description;
-    @ManyToOne
+    @Min(1) @Max(5)
+    private int rating;
+    @ManyToOne @NotNull
     private User user;
-    @ManyToOne
+    @ManyToOne @NotNull
     private Movie movie;
 }

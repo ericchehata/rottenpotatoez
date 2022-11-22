@@ -1,5 +1,6 @@
 package rottenpotatoez.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rottenpotatoez.dao.ReviewRepository;
@@ -12,6 +13,7 @@ import java.util.UUID;
 
 @Service
 @Transactional
+@AllArgsConstructor
 public class ReviewService {
 
     private ReviewRepository reviewRepository;

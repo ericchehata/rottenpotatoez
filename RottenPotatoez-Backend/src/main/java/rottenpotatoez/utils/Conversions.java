@@ -21,7 +21,7 @@ public class Conversions {
     }
 
     public static Review convertToModel(ReviewDTO review){
-        return new Review(review.getId() != null ? review.getId() : UUID.randomUUID(), review.getTitle(), review.getRating(), review.getDescription(), convertToModel(review.getUser()), convertToModel(review.getMovie()));
+        return new Review(review.getId() != null ? review.getId() : UUID.randomUUID(), review.getTitle(), review.getDescription(), review.getRating(), convertToModel(review.getUser()), convertToModel(review.getMovie()));
     }
 
     public static UserDTO convertToDTO(User user){
@@ -35,6 +35,6 @@ public class Conversions {
     }
 
     public static ReviewDTO convertToDTO(Review review){
-        return new ReviewDTO(review.getId(), review.getTitle(), review.getRating(), review.getDescription(), convertToDTO(review.getUser()), convertToDTO(review.getMovie()));
+        return new ReviewDTO(review.getId(), review.getTitle(), review.getDescription(), review.getRating(), convertToDTO(review.getUser()), convertToDTO(review.getMovie()));
     }
 }

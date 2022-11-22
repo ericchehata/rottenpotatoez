@@ -12,8 +12,8 @@ import java.util.UUID;
 public class ReviewDTO {
     private UUID id;
     private String title;
-    private int rating;
     private String description;
+    private int rating;
     private UserDTO user;
     private MovieDTO movie;
 }
