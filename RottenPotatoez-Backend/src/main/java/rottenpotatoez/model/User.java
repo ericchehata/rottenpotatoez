@@ -1,5 +1,6 @@
 package rottenpotatoez.model;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,7 @@ public class User {
     private String lastName;
     @NotNull
     private LocalDate dateOfBirth;
-    @NotBlank
+    @NotBlank @Email
     private String email;
     @NotBlank
     private String picture;

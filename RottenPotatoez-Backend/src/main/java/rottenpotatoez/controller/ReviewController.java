@@ -57,6 +57,30 @@ public class ReviewController {
         }
     }
 
+    @GetMapping("/movie/{movieId}")
+    public ResponseEntity<?> getReviewsByMovie(@PathVariable UUID movieId){
+        try{
+            return ResponseEntity.ok(reviewService.getReviewsByMovie(movieId)
+                    .stream()
+                    .map(Conversions::convertToDTO)
+                    .collect(Collectors.toList()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/user/{username}")
+    public ResponseEntity<?> getReviewsByUser(@PathVariable String username){
+        try{
+            return ResponseEntity.ok(reviewService.getReviewsByUser(username)
+                    .stream()
+                    .map(Conversions::convertToDTO)
+                    .collect(Collectors.toList()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteReview(@PathVariable UUID id){
         try{
