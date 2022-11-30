@@ -392,6 +392,19 @@ public class UserServiceTests {
     }
 
     @Test
+    public void editUserNotFound(){
+        UserDTO user = new UserDTO(VALID_USERNAME, "New Password123", "New First Name",
+                "New Last name", LocalDate.of(2001,1,1), USER2_EMAIL,
+                "newPicture.png", false);
+        try{
+            userService.createOrEditUser(user, false);
+            fail("Should throw exception");
+        } catch (IllegalArgumentException e) {
+            assertEquals("User "+ user.getUsername() +" not found", e.getMessage() );
+        }
+    }
+
+    @Test
     public void getUserSuccess(){
         try{
             User user = userService.getUser(USER_USERNAME);

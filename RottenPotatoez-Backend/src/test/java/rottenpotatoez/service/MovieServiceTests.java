@@ -1,6 +1,5 @@
 package rottenpotatoez.service;
 
-import com.jayway.jsonpath.internal.path.PathCompiler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -8,10 +7,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 
-import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
@@ -19,8 +18,6 @@ import rottenpotatoez.dao.MovieRepository;
 import rottenpotatoez.dto.MovieDTO;
 import rottenpotatoez.model.Genre;
 import rottenpotatoez.model.Movie;
-import rottenpotatoez.model.Rating;
-import rottenpotatoez.model.User;
 import rottenpotatoez.utils.Conversions;
 
 import java.time.LocalDate;
@@ -28,10 +25,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.mockito.ArgumentMatchers.any;
-
 @ExtendWith(MockitoExtension.class)
-public class MovieServiceTest {
+public class MovieServiceTests {
 
     @Mock
     private MovieRepository movieRepository;
@@ -349,6 +344,18 @@ public class MovieServiceTest {
             fail("Should throw exception");
         }catch (Exception e){
             assertEquals("Movie with title " + movie.getTitle() + " already exists", e.getMessage());
+        }
+    }
+
+    @Test
+    public void editMovieNotFound(){
+        MovieDTO movie = new MovieDTO(INVALID_ID, MOVIE_TITLE_2, "new description", 130,
+                LocalDate.of(1998,1,1), "new picture", "PG", List.of("Crime", "Drama"));
+        try{
+            movieService.createOrEditMovie(movie);
+            fail("Should throw exception");
+        }catch (Exception e){
+            assertEquals("Movie " + INVALID_ID + " not found", e.getMessage());
         }
     }
 

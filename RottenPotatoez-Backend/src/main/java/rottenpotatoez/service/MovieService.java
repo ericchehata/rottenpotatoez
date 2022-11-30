@@ -68,6 +68,10 @@ public class MovieService {
             }
         }
 
+        if(movieDTO.getId() != null && !movieRepository.existsById(movieDTO.getId())) {
+            throw new IllegalArgumentException("Movie " + movieDTO.getId() + " not found");
+        }
+
         Movie movie = Conversions.convertToModel(movieDTO);
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -77,9 +81,8 @@ public class MovieService {
             ConstraintViolation<Movie> violation = violations.iterator().next();
             throw new IllegalArgumentException(violation.getPropertyPath()+" "+violation.getMessage());
         }
-        if((!movieRepository.existsById(movie.getId())
-                || (movieRepository.existsById(movie.getId())
-                && !getMovie(movie.getId()).getTitle().equals(movie.getTitle())))
+        if((movieDTO.getId() == null
+                || (movieDTO.getId() != null && !getMovie(movie.getId()).getTitle().equals(movie.getTitle())))
                 && movieRepository.existsByTitle(movie.getTitle())){
             throw new IllegalArgumentException("Movie with title " + movie.getTitle() + " already exists");
         }

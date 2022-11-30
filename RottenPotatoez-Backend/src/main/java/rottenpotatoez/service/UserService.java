@@ -58,6 +58,10 @@ public class UserService {
             throw new IllegalArgumentException("Username "+ user.getUsername() +" already taken");
         }
 
+        if(!isCreate && !userRepository.existsByUsername(user.getUsername())){
+            throw new IllegalArgumentException("User "+ user.getUsername() +" not found");
+        }
+
         //Email validation
         if(isCreate && userRepository.existsByEmail(user.getEmail())){
             throw new IllegalArgumentException("Email "+ user.getEmail() +" already taken");
