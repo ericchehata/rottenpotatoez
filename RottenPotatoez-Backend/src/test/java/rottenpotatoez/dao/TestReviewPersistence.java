@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -49,13 +50,12 @@ public class TestReviewPersistence {
 
         UUID movieId = UUID.randomUUID();
         String movieTitle = "movieTitle";
-        String movieDescription = "movieDescription";
         int duration = 120;
         LocalDate releaseDate = LocalDate.of(2021, 1, 1);
         String moviePicture = "moviePicture.png";
         Rating rating = Rating.G;
         List<Genre> genres = List.of(Genre.Action, Genre.Adventure);
-        Movie movie = new Movie(movieId, movieTitle, movieDescription, duration, releaseDate, moviePicture, rating, genres);
+        Movie movie = new Movie(movieId, movieTitle, duration, releaseDate, moviePicture, rating, genres);
         movieRepository.save(movie);
 
         UUID reviewId = UUID.randomUUID();
@@ -64,6 +64,8 @@ public class TestReviewPersistence {
         int reviewRating = 5;
         Review review = new Review(reviewId, reviewTitle, reviewDescription, reviewRating, user, movie);
         reviewRepository.save(review);
+
+        if(reviewRepository.findById(reviewId).isEmpty()) fail("Review not saved");
 
         review = reviewRepository.findById(reviewId).get();
 
@@ -81,7 +83,6 @@ public class TestReviewPersistence {
         assertEquals(user.isAdmin(), review.getUser().isAdmin());
         assertEquals(movie.getId(), review.getMovie().getId());
         assertEquals(movie.getTitle(), review.getMovie().getTitle());
-        assertEquals(movie.getDescription(), review.getMovie().getDescription());
         assertEquals(movie.getDuration(), review.getMovie().getDuration());
         assertEquals(movie.getReleaseDate(), review.getMovie().getReleaseDate());
         assertEquals(movie.getPicture(), review.getMovie().getPicture());
