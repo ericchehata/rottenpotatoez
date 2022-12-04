@@ -49,30 +49,31 @@ public class MovieController {
 
         List<MovieDTO> movieDTOList = new ArrayList<>();
         for(int i=1; i<rows; i++) {
-            Row row = CellUtil.getRow(i, sheet);
-            String title = null;
             try {
-                title = row.getCell(0).getStringCellValue();
-            }catch (IllegalStateException e){
-                title = String.valueOf((int) row.getCell(0).getNumericCellValue());
-            }
-            int duration = (int) row.getCell(1).getNumericCellValue();
-            LocalDate releaseDate = row.getCell(2).getDateCellValue().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
-            String image = row.getCell(3).getStringCellValue();
-            String rating = row.getCell(4).getStringCellValue();
-            ArrayList <String> genres = new ArrayList<>();
-            for(int j=5; j<row.getPhysicalNumberOfCells(); j++) {
-                if (row.getCell(j).getCellType() != Cell.CELL_TYPE_BLANK) {
-                    genres.add(row.getCell(j).getStringCellValue());
+                Row row = CellUtil.getRow(i, sheet);
+                String title = null;
+                try {
+                    title = row.getCell(0).getStringCellValue();
+                } catch (IllegalStateException e) {
+                    title = String.valueOf((int) row.getCell(0).getNumericCellValue());
                 }
-            }
-
-            try{
+                int duration = (int) row.getCell(1).getNumericCellValue();
+                LocalDate releaseDate = row.getCell(2).getDateCellValue().toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+                String image = row.getCell(3).getStringCellValue();
+                String rating = row.getCell(4).getStringCellValue();
+                ArrayList<String> genres = new ArrayList<>();
+                for (int j = 5; j < row.getPhysicalNumberOfCells(); j++) {
+                    if (row.getCell(j).getCellType() != Cell.CELL_TYPE_BLANK) {
+                        genres.add(row.getCell(j).getStringCellValue());
+                    }
+                }
                 MovieDTO movieDTO = new MovieDTO(null, title, duration, releaseDate, image, rating, genres);
                 movieDTOList.add(Conversions.convertToDTO(movieService.createOrEditMovie(movieDTO)));
                 System.out.println("Movie added: " + movieDTO.getTitle());
-            } catch (Exception e) {
+            } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
+            } catch (NullPointerException e) {
+                continue;
             }
         }
 
