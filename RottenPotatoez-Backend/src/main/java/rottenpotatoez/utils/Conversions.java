@@ -15,7 +15,7 @@ public class Conversions {
     }
 
     public static Movie convertToModel(MovieDTO movie){
-        return new Movie(movie.getId() != null ? movie.getId() : UUID.randomUUID(), movie.getTitle(), movie.getDescription(),
+        return new Movie(movie.getId() != null ? movie.getId() : UUID.randomUUID(), movie.getTitle(),
                 movie.getDuration(), movie.getReleaseDate(), movie.getPicture(), Rating.valueOf(movie.getRating()),
                 movie.getGenres().stream().map(genre -> genre.equals("True story") ? Genre.True_Story : Genre.valueOf(genre)).collect(Collectors.toList()));
     }
@@ -29,8 +29,8 @@ public class Conversions {
     }
 
     public static MovieDTO convertToDTO(Movie movie){
-        return new MovieDTO(movie.getId(), movie.getTitle(), movie.getDescription(),
-                movie.getDuration(), movie.getReleaseDate(), movie.getPicture(), movie.getRating().toString(),
+        return new MovieDTO(movie.getId(), movie.getTitle(), movie.getDuration(),
+                movie.getReleaseDate(), movie.getPicture(), movie.getRating().toString(),
                 movie.getGenres().stream().map(genre -> genre.equals(Genre.True_Story) ? "True story" : genre.toString()).collect(Collectors.toList()));
     }
 

@@ -36,21 +36,23 @@ public class MovieServiceTests {
 
     private static final UUID MOVIE_ID = UUID.randomUUID();
     private static final String MOVIE_TITLE = "Movie Title";
-    private static final String MOVIE_DESCRIPTION = "Movie Description";
     private static final int MOVIE_DURATION = 120;
     private static final LocalDate MOVIE_RELEASE_DATE = LocalDate.now();
     private static final String MOVIE_PICTURE = "Movie Picture";
     private static final String MOVIE_RATING = "G";
     private static final List<String> MOVIE_GENRES = List.of("Action", "Adventure");
+    private static final MovieDTO MOVIE1 = new MovieDTO(MOVIE_ID, MOVIE_TITLE, MOVIE_DURATION,
+            MOVIE_RELEASE_DATE, MOVIE_PICTURE, MOVIE_RATING, MOVIE_GENRES);
 
     private static final UUID MOVIE_ID_2 = UUID.randomUUID();
     private static final String MOVIE_TITLE_2 = "Movie Title 2";
-    private static final String MOVIE_DESCRIPTION_2 = "Movie Description 2";
     private static final int MOVIE_DURATION_2 = 120;
     private static final LocalDate MOVIE_RELEASE_DATE_2 = LocalDate.now();
     private static final String MOVIE_PICTURE_2 = "Movie Picture 2";
     private static final String MOVIE_RATING_2 = "R";
     private static final List<String> MOVIE_GENRES_2 = List.of("Comedy");
+    private static final MovieDTO MOVIE2 = new MovieDTO(MOVIE_ID_2, MOVIE_TITLE_2, MOVIE_DURATION_2,
+            MOVIE_RELEASE_DATE_2, MOVIE_PICTURE_2, MOVIE_RATING_2, MOVIE_GENRES_2);
 
     private static final String VALID_MOVIE_TITLE = "Valid Movie Title";
     private static final UUID INVALID_ID = UUID.randomUUID();
@@ -61,13 +63,9 @@ public class MovieServiceTests {
         lenient().when(movieRepository.findById(any(UUID.class))).thenAnswer((invocation) -> {
             UUID id = invocation.getArgument(0);
             if (id.equals(MOVIE_ID)) {
-                return Optional.of(Conversions.convertToModel(
-                        new MovieDTO(MOVIE_ID, MOVIE_TITLE, MOVIE_DESCRIPTION, MOVIE_DURATION,
-                                MOVIE_RELEASE_DATE, MOVIE_PICTURE, MOVIE_RATING, MOVIE_GENRES)));
+                return Optional.of(Conversions.convertToModel(MOVIE1));
             } else if (id.equals(MOVIE_ID_2)) {
-                return Optional.of(Conversions.convertToModel(
-                        new MovieDTO(MOVIE_ID_2, MOVIE_TITLE_2, MOVIE_DESCRIPTION_2, MOVIE_DURATION_2,
-                                MOVIE_RELEASE_DATE_2, MOVIE_PICTURE_2, MOVIE_RATING_2, MOVIE_GENRES_2)));
+                return Optional.of(Conversions.convertToModel(MOVIE2));
             } else {
                 return Optional.empty();
             }
@@ -105,12 +103,11 @@ public class MovieServiceTests {
 
     @Test
     public void createMovieSuccess(){
-        MovieDTO movieDTO = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DESCRIPTION, MOVIE_DURATION,
+        MovieDTO movieDTO = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DURATION,
                 MOVIE_RELEASE_DATE, MOVIE_PICTURE, MOVIE_RATING, MOVIE_GENRES);
         try{
             Movie movie = movieService.createOrEditMovie(movieDTO);
             assertEquals(movieDTO.getTitle(), movie.getTitle());
-            assertEquals(movieDTO.getDescription(), movie.getDescription());
             assertEquals(movieDTO.getDuration(), movie.getDuration());
             assertEquals(movieDTO.getReleaseDate(), movie.getReleaseDate());
             assertEquals(movieDTO.getPicture(), movie.getPicture());
@@ -125,7 +122,7 @@ public class MovieServiceTests {
 
     @Test
     public void createMovieTakenTitle(){
-        MovieDTO movie = new MovieDTO(null, MOVIE_TITLE, MOVIE_DESCRIPTION, MOVIE_DURATION,
+        MovieDTO movie = new MovieDTO(null, MOVIE_TITLE, MOVIE_DURATION,
                 MOVIE_RELEASE_DATE, MOVIE_PICTURE, MOVIE_RATING, MOVIE_GENRES);
         try{
             movieService.createOrEditMovie(movie);
@@ -137,7 +134,7 @@ public class MovieServiceTests {
 
     @Test
     public void createMovieBlankTitle(){
-        MovieDTO movie = new MovieDTO(null, "", MOVIE_DESCRIPTION, MOVIE_DURATION,
+        MovieDTO movie = new MovieDTO(null, "", MOVIE_DURATION,
                 MOVIE_RELEASE_DATE, MOVIE_PICTURE, MOVIE_RATING, MOVIE_GENRES);
         try{
             movieService.createOrEditMovie(movie);
@@ -149,7 +146,7 @@ public class MovieServiceTests {
 
     @Test
     public void createMovieNullTitle(){
-        MovieDTO movie = new MovieDTO(null, null, MOVIE_DESCRIPTION, MOVIE_DURATION,
+        MovieDTO movie = new MovieDTO(null, null, MOVIE_DURATION,
                 MOVIE_RELEASE_DATE, MOVIE_PICTURE, MOVIE_RATING, MOVIE_GENRES);
         try{
             movieService.createOrEditMovie(movie);
@@ -159,45 +156,10 @@ public class MovieServiceTests {
         }
     }
 
-    @Test
-    public void createMovieBlankDescription(){
-        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, "", MOVIE_DURATION,
-                MOVIE_RELEASE_DATE, MOVIE_PICTURE, MOVIE_RATING, MOVIE_GENRES);
-        try{
-            movieService.createOrEditMovie(movie);
-            fail("Should throw exception");
-        } catch (Exception e) {
-            assertEquals("description must not be blank", e.getMessage());
-        }
-    }
-
-    @Test
-    public void createMovieNullDescription(){
-        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, null, MOVIE_DURATION,
-                MOVIE_RELEASE_DATE, MOVIE_PICTURE, MOVIE_RATING, MOVIE_GENRES);
-        try{
-            movieService.createOrEditMovie(movie);
-            fail("Should throw exception");
-        } catch (Exception e) {
-            assertEquals("description must not be blank", e.getMessage());
-        }
-    }
-
-    @Test
-    public void createMovieInvalidDuration(){
-        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DESCRIPTION, 0,
-                MOVIE_RELEASE_DATE, MOVIE_PICTURE, MOVIE_RATING, MOVIE_GENRES);
-        try{
-            movieService.createOrEditMovie(movie);
-            fail("Should throw exception");
-        } catch (Exception e) {
-            assertEquals("duration must be greater than or equal to 1", e.getMessage());
-        }
-    }
 
     @Test
     public void createMovieNullReleaseDate(){
-        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DESCRIPTION, MOVIE_DURATION,
+        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DURATION,
                 null, MOVIE_PICTURE, MOVIE_RATING, MOVIE_GENRES);
         try{
             movieService.createOrEditMovie(movie);
@@ -209,7 +171,7 @@ public class MovieServiceTests {
 
     @Test
     public void createMovieBlankPicture(){
-        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DESCRIPTION, MOVIE_DURATION,
+        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DURATION,
                 MOVIE_RELEASE_DATE, "", MOVIE_RATING, MOVIE_GENRES);
         try{
             movieService.createOrEditMovie(movie);
@@ -221,7 +183,7 @@ public class MovieServiceTests {
 
     @Test
     public void createMovieNullPicture(){
-        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DESCRIPTION, MOVIE_DURATION,
+        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DURATION,
                 MOVIE_RELEASE_DATE, null, MOVIE_RATING, MOVIE_GENRES);
         try{
             movieService.createOrEditMovie(movie);
@@ -233,7 +195,7 @@ public class MovieServiceTests {
 
     @Test
     public void createMovieBlankRating(){
-        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DESCRIPTION, MOVIE_DURATION,
+        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DURATION,
                 null, MOVIE_PICTURE, "", MOVIE_GENRES);
         try{
             movieService.createOrEditMovie(movie);
@@ -245,7 +207,7 @@ public class MovieServiceTests {
 
     @Test
     public void createMovieNullRating(){
-        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DESCRIPTION, MOVIE_DURATION,
+        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DURATION,
                 null, MOVIE_PICTURE, "", MOVIE_GENRES);
         try{
             movieService.createOrEditMovie(movie);
@@ -257,7 +219,7 @@ public class MovieServiceTests {
 
     @Test
     public void createMovieInvalidRating(){
-        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DESCRIPTION, MOVIE_DURATION,
+        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DURATION,
                 null, MOVIE_PICTURE, "Invalid Rating", MOVIE_GENRES);
         try{
             movieService.createOrEditMovie(movie);
@@ -269,7 +231,7 @@ public class MovieServiceTests {
 
     @Test
     public void createMovieInvalidGenre(){
-        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DESCRIPTION, MOVIE_DURATION,
+        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DURATION,
                 null, MOVIE_PICTURE, MOVIE_RATING, List.of("Invalid Genre"));
         try{
             movieService.createOrEditMovie(movie);
@@ -283,7 +245,7 @@ public class MovieServiceTests {
 
     @Test
     public void createMovieEmptyGenres(){
-        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DESCRIPTION, MOVIE_DURATION,
+        MovieDTO movie = new MovieDTO(null, VALID_MOVIE_TITLE, MOVIE_DURATION,
                 MOVIE_RELEASE_DATE, MOVIE_PICTURE, MOVIE_RATING, List.of());
         try{
             movieService.createOrEditMovie(movie);
@@ -295,13 +257,12 @@ public class MovieServiceTests {
 
     @Test
     public void editMovieSuccess(){
-        MovieDTO movie = new MovieDTO(MOVIE_ID, VALID_MOVIE_TITLE, "new description", 130,
+        MovieDTO movie = new MovieDTO(MOVIE_ID, VALID_MOVIE_TITLE, 130,
                 LocalDate.of(1998,1,1), "new picture", "PG", List.of("Crime", "Drama"));
         try{
             Movie editedMovie = movieService.createOrEditMovie(movie);
             assertEquals(movie.getId(), editedMovie.getId());
             assertEquals(movie.getTitle(), editedMovie.getTitle());
-            assertEquals(movie.getDescription(), editedMovie.getDescription());
             assertEquals(movie.getDuration(), editedMovie.getDuration());
             assertEquals(movie.getReleaseDate(), editedMovie.getReleaseDate());
             assertEquals(movie.getPicture(), editedMovie.getPicture());
@@ -316,13 +277,12 @@ public class MovieServiceTests {
 
     @Test
     public void editMovieSameTitleSuccess(){
-        MovieDTO movie = new MovieDTO(MOVIE_ID, MOVIE_TITLE, "new description", 130,
+        MovieDTO movie = new MovieDTO(MOVIE_ID, MOVIE_TITLE,130,
                 LocalDate.of(1998,1,1), "new picture", "PG", List.of("Crime", "Drama"));
         try{
             Movie editedMovie = movieService.createOrEditMovie(movie);
             assertEquals(movie.getId(), editedMovie.getId());
             assertEquals(movie.getTitle(), editedMovie.getTitle());
-            assertEquals(movie.getDescription(), editedMovie.getDescription());
             assertEquals(movie.getDuration(), editedMovie.getDuration());
             assertEquals(movie.getReleaseDate(), editedMovie.getReleaseDate());
             assertEquals(movie.getPicture(), editedMovie.getPicture());
@@ -337,7 +297,7 @@ public class MovieServiceTests {
 
     @Test
     public void editMovieTakenTitle(){
-        MovieDTO movie = new MovieDTO(MOVIE_ID, MOVIE_TITLE_2, "new description", 130,
+        MovieDTO movie = new MovieDTO(MOVIE_ID, MOVIE_TITLE_2,  130,
                 LocalDate.of(1998,1,1), "new picture", "PG", List.of("Crime", "Drama"));
         try{
            movieService.createOrEditMovie(movie);
@@ -349,7 +309,7 @@ public class MovieServiceTests {
 
     @Test
     public void editMovieNotFound(){
-        MovieDTO movie = new MovieDTO(INVALID_ID, MOVIE_TITLE_2, "new description", 130,
+        MovieDTO movie = new MovieDTO(INVALID_ID, MOVIE_TITLE_2,  130,
                 LocalDate.of(1998,1,1), "new picture", "PG", List.of("Crime", "Drama"));
         try{
             movieService.createOrEditMovie(movie);
@@ -365,7 +325,6 @@ public class MovieServiceTests {
             Movie movie = movieService.getMovie(MOVIE_ID);
             assertEquals(MOVIE_ID, movie.getId());
             assertEquals(MOVIE_TITLE, movie.getTitle());
-            assertEquals(MOVIE_DESCRIPTION, movie.getDescription());
             assertEquals(MOVIE_DURATION, movie.getDuration());
             assertEquals(MOVIE_RELEASE_DATE, movie.getReleaseDate());
             assertEquals(MOVIE_PICTURE, movie.getPicture());
@@ -394,7 +353,6 @@ public class MovieServiceTests {
             Movie movie = movieService.getMovie(MOVIE_TITLE);
             assertEquals(MOVIE_ID, movie.getId());
             assertEquals(MOVIE_TITLE, movie.getTitle());
-            assertEquals(MOVIE_DESCRIPTION, movie.getDescription());
             assertEquals(MOVIE_DURATION, movie.getDuration());
             assertEquals(MOVIE_RELEASE_DATE, movie.getReleaseDate());
             assertEquals(MOVIE_PICTURE, movie.getPicture());
@@ -424,7 +382,6 @@ public class MovieServiceTests {
             assertEquals(2, movies.size());
             assertEquals(MOVIE_ID, movies.get(0).getId());
             assertEquals(MOVIE_TITLE, movies.get(0).getTitle());
-            assertEquals(MOVIE_DESCRIPTION, movies.get(0).getDescription());
             assertEquals(MOVIE_DURATION, movies.get(0).getDuration());
             assertEquals(MOVIE_RELEASE_DATE, movies.get(0).getReleaseDate());
             assertEquals(MOVIE_PICTURE, movies.get(0).getPicture());
@@ -434,7 +391,6 @@ public class MovieServiceTests {
             }
             assertEquals(MOVIE_ID_2, movies.get(1).getId());
             assertEquals(MOVIE_TITLE_2, movies.get(1).getTitle());
-            assertEquals(MOVIE_DESCRIPTION_2, movies.get(1).getDescription());
             assertEquals(MOVIE_DURATION_2, movies.get(1).getDuration());
             assertEquals(MOVIE_RELEASE_DATE_2, movies.get(1).getReleaseDate());
             assertEquals(MOVIE_PICTURE_2, movies.get(1).getPicture());
