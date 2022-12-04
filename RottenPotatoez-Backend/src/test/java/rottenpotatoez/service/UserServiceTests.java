@@ -335,30 +335,6 @@ public class UserServiceTests {
     }
 
     @Test
-    public void createUserBlankPicture() {
-        UserDTO user = new UserDTO(VALID_USERNAME, USER_PASSWORD, USER_FIRST_NAME,
-                USER_LAST_NAME, USER_DATE_OF_BIRTH, VALID_EMAIL, "", USER_ADMIN);
-        try{
-            userService.createOrEditUser(user, true);
-            fail("Should throw exception");
-        } catch (IllegalArgumentException e) {
-            assertEquals("picture must not be blank", e.getMessage());
-        }
-    }
-
-    @Test
-    public void createUserNullPicture() {
-        UserDTO user = new UserDTO(VALID_USERNAME, USER_PASSWORD, USER_FIRST_NAME,
-                USER_LAST_NAME, USER_DATE_OF_BIRTH, VALID_EMAIL, null, USER_ADMIN);
-        try{
-            userService.createOrEditUser(user, true);
-            fail("Should throw exception");
-        } catch (IllegalArgumentException e) {
-            assertEquals("picture must not be blank", e.getMessage());
-        }
-    }
-
-    @Test
     public void editUserSuccess(){
         UserDTO userDTO = new UserDTO(USER_USERNAME, "New Password123", "New First Name",
                 "New Last name", LocalDate.of(2001,1,1), "new@mail.ca",
