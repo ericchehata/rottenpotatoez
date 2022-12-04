@@ -32,7 +32,6 @@ public class User {
     private LocalDate dateOfBirth;
     @NotBlank @Email
     private String email;
-    @NotBlank
     private String picture;
     private boolean isAdmin;
 }

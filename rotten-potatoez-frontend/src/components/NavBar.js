@@ -5,6 +5,7 @@ import {
   AppBar,
   Box,
   Container,
+  SvgIcon,
   IconButton,
   Menu,
   MenuItem,
@@ -14,9 +15,9 @@ import {
 import {
   AccountCircle,
   Menu as MenuIcon,
-  ThumbsUpDown as ThumbsUpDownIcon,
 } from "@mui/icons-material";
 import NavBarStyle from "../styles/NavBarStyle";
+import {ReactComponent as Logo} from "../icons/logo.svg";
 
 function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -117,7 +118,7 @@ function NavBar() {
               ))}
             </Menu>
           </Box>
-          <ThumbsUpDownIcon sx={NavBarStyle.logo} />
+          <SvgIcon component={Logo} sx={{mt:4, height:"60px", width:"60px"}} viewBox="0 0 100 100" />
           <Typography
             variant="h5"
             noWrap
