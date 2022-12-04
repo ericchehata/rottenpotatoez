@@ -1,7 +1,6 @@
 import * as React from "react";
 import axios from "axios";
 import {
-  Box,
   Table,
   TableBody,
   TableCell,
@@ -12,6 +11,7 @@ import {
 } from "@mui/material";
 import Genres from "./Genres";
 import EnhancedTableHead from "./EnhancedTableHead";
+import MoviesTableStyle from "../styles/MoviesTableStyle";
 
 const MoviesTable = () => {
   const [movies, setMovies] = React.useState([]);
@@ -78,18 +78,9 @@ const MoviesTable = () => {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
-      <Paper sx={{ width: "100%", mb: 2 }}>
+      <Paper sx={MoviesTableStyle.container}>
         <TableContainer>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            {/* <TableHead>
-              <TableRow>
-                <TableCell>Title</TableCell>
-                <TableCell>Duration (min)</TableCell>
-                <TableCell>Release Date</TableCell>
-                <TableCell>Genres</TableCell>
-              </TableRow>
-            </TableHead> */}
+          <Table sx={MoviesTableStyle.table} aria-label="simple table">
             <EnhancedTableHead
               headCells={headCells}
               order={order}
@@ -102,7 +93,7 @@ const MoviesTable = () => {
                 .map((movie) => (
                   <TableRow
                     key={movie.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    sx={MoviesTableStyle.tableRow}
                   >
                     <TableCell component="th" scope="row">
                       {movie.title} ({movie.releaseDate.split("-")[0]})
@@ -127,7 +118,6 @@ const MoviesTable = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-    </Box>
   );
 };
 

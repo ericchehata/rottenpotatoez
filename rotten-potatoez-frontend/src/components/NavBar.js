@@ -15,6 +15,7 @@ import {
   Menu as MenuIcon,
   ThumbsUpDown as ThumbsUpDownIcon,
 } from "@mui/icons-material";
+import NavBarStyle from "../styles/NavBarStyle";
 
 function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -48,7 +49,7 @@ function NavBar() {
       <AppBar position="static" color="primary">
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Box sx={{ flexGrow: 1, display: "flex"}}>
+            <Box sx={NavBarStyle.menuContainer}>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -73,9 +74,7 @@ function NavBar() {
                 }}
                 open={Boolean(anchorElNav)}
                 onClose={handleCloseNavMenu}
-                sx={{
-                  display: "block",
-                }}
+                sx={NavBarStyle.menu}
               >
                 {pages.map((page) => (
                   <MenuItem
@@ -90,23 +89,14 @@ function NavBar() {
               </Menu>
             </Box>
             <ThumbsUpDownIcon
-              sx={{ display: "flex", mr: 1 }}
+              sx={NavBarStyle.logo}
             />
             <Typography
               variant="h5"
               noWrap
               component="a"
               href="/"
-              sx={{
-                mr: 2,
-                display: "flex",
-                flexGrow: 1,
-                fontFamily: "monospace",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-              }}
+              sx={NavBarStyle.title}
             >
               Rotten Potatoez
             </Typography>

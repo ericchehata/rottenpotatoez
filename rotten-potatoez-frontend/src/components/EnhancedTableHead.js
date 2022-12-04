@@ -6,6 +6,7 @@ import {
   TableSortLabel,
 } from "@mui/material";
 import { visuallyHidden } from "@mui/utils";
+import MoviesTableStyle from "../styles/MoviesTableStyle";
 
 const EnhancedTableHead = (props) => {
   const { headCells, order, orderBy, onRequestSort } = props;
@@ -20,6 +21,7 @@ const EnhancedTableHead = (props) => {
           <TableCell
             key={headCell.property}
             sortDirection={orderBy === headCell.property ? order : false}
+            sx={MoviesTableStyle.tableHeaderCell}
           >
               <TableSortLabel
                 active={orderBy === headCell.property}
