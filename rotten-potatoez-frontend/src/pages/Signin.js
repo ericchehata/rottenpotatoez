@@ -60,9 +60,9 @@ const Signin = () => {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
+            id="username"
+            label="Username"
+            name="username"
             autoFocus
             onChange={handleUsernameChange}
           />
