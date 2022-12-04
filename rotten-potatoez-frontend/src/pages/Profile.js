@@ -33,34 +33,22 @@ const Profile = () => {
   useEffect(() => {
       console.log("user id from local storage is null? " + localStorage.getItem("userId") === "");
       setLoading(true);
-    //   loadData();
+      loadData();
       setLoading(false);
       // eslint-disable-next-line
   }, []);
 
-  React.useEffect(() => {
-    const username = localStorage.getItem("username");
-    setUserId(username);
-    if (username) {
-      axios.get(`users/${username}`).then((res) => {
-        setUser(res.data);
-        console.log(res.data);
-      });
+    const loadData = () => {
+        setLoading(true);
+        axios
+            .get("users/" + localStorage.getItem("userId"))
+            .then((res) => {
+                setUser(res.data);
+                setUserId(localStorage.getItem("userId"));
+                console.log(userId);
+            });
+        setLoading(false);
     }
-    // eslint-disable-next-line
-  }, []);
-
-    // const loadData = () => {
-    //     setLoading(true);
-    //     axios
-    //         .get("users/" + localStorage.getItem("userId"))
-    //         .then((res) => {
-    //             setUser(res.data);
-    //             setUserId(localStorage.getItem("userId"));
-    //             console.log(userId);
-    //         });
-    //     setLoading(false);
-    // }
 
     const handleUpdatePassword = React.useCallback(() => {
 
