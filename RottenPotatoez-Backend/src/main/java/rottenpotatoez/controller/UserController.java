@@ -73,7 +73,7 @@ public class UserController {
             User user = userService.login(username, password);
             return ResponseEntity.ok(Conversions.convertToDTO(user));
         }catch(IllegalArgumentException e) {
-            return ResponseEntity.internalServerError(e.getMessage());
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
 
 
