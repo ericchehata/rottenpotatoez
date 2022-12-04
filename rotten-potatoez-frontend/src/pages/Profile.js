@@ -33,22 +33,16 @@ const Profile = () => {
   useEffect(() => {
       console.log("user id from local storage is null? " + localStorage.getItem("userId") === "");
       setLoading(true);
-      loadData();
+      const username = localStorage.getItem("username");
+      axios.get(`users/${username}`).then((res) => {
+        if(res.data){
+            console.log(res.data);
+            setUser(res.data);
+        }
+        setUserId(localStorage.getItem("userId"));
+    });
       setLoading(false);
-      // eslint-disable-next-line
   }, []);
-
-    const loadData = () => {
-        setLoading(true);
-        axios
-            .get("users/" + localStorage.getItem("userId"))
-            .then((res) => {
-                setUser(res.data);
-                setUserId(localStorage.getItem("userId"));
-                console.log(userId);
-            });
-        setLoading(false);
-    }
 
     const handleUpdatePassword = React.useCallback(() => {
 
@@ -59,7 +53,31 @@ const Profile = () => {
             setError(true);
             setErrorMessage("Passwords don't match.");
         }
+        // console.log(oldPassword);
+        console.log(user);
+        if(oldPassword === user.password){
+            console.log(oldPassword);
+        }
         else if(visible2) {
+            // axios
+            //     .post(`users`, {
+            //         username: user.username,
+            //         password: password,
+            //         firstName: user.firstName,
+            //         lastName: user.lastName,
+            //         dateOfBirth: user.dateOfBirth,
+            //         email: user.email,
+            //         isAdmin: false
+            //     })
+            //     .then((res) => {
+            //         localStorage.setItem("username", res.data.username);
+            //         window.location.href = "/";
+            //         setSuccess(true);
+            //         setSuccessMessage("Password was updated successfully");
+            //     })
+            //     .catch((err) => {
+            //         setError(err.response.data);
+            //     });
             axios.patch("users/change-password/" + userId, {
 
             }, {params: {
@@ -75,29 +93,20 @@ const Profile = () => {
             });
         }
         console.log(errorMessage)
-    }, [userId, oldPassword, password, confirmPassword, errorMessage, visible2])
+    }, [password, confirmPassword, user, oldPassword, visible2, errorMessage, userId])
 
     const handleDelete = React.useCallback(() => {
 
         setVisible(true);
         console.log("Delete button was pressed");
         if(visible) {
-            axios.delete("users/" + userId, {
-                params: {
-                    password: password
-                }
-            }).then(res => {
-                setSuccess(true);
-                setSuccessMessage("Account was deleted successfully");
-                localStorage.removeItem("userId");
-                window.location.href = "/";
-            }).catch(function (error) {
-                setError(true);
-                setErrorMessage("Account could not be deleted.");
-            });
+            const username = localStorage.getItem("username");
+            axios.delete(`users/${username}`).then((res) => {
+                console.log(res.data);
+              });
         }
-        console.log(errorMessage)
-    }, [userId, password, visible, errorMessage])
+        console.log(errorMessage);
+    }, [visible, errorMessage])
 
   return (
       <Container
