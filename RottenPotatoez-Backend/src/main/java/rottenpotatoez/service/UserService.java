@@ -43,6 +43,17 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    public User login(String username, String password) {
+
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new IllegalArgumentException("Invalid username " + username));
+
+        if (user.getPassword().equals(password))
+            return user;
+
+        throw new IllegalArgumentException("Incorrect password");
+    }
+
     private void validateUser(User user, boolean isCreate){
 
         ValidatorFactory factory = Validation.buildDefaultValidatorFactory();

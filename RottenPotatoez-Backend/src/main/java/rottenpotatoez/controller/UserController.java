@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rottenpotatoez.dto.UserDTO;
+import rottenpotatoez.model.User;
 import rottenpotatoez.service.UserService;
 import rottenpotatoez.utils.Conversions;
 
@@ -64,6 +65,18 @@ public class UserController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
+        try {
+            User user = userService.login(username, password);
+            return ResponseEntity.ok(Conversions.convertToDTO(user));
+        }catch(IllegalArgumentException e) {
+            return ResponseEntity.internalServerError(e.getMessage());
+        }
+
+
     }
 
 }
