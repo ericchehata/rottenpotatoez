@@ -6,6 +6,7 @@ import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import Movie from "./pages/Movie";
 import MyReviews from "./pages/MyReviews";
+import CreateMovie from "./pages/CreateMovie";
 
 const theme = createTheme({
   palette: {
@@ -33,6 +34,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/movie/:id" element={<Movie />} />
             <Route path="/my-reviews" element={<MyReviews />} />
+            <Route path="/add-movie" element={<CreateMovie />} />
           </Routes>
       </ThemeProvider>
     </BrowserRouter>

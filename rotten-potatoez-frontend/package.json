@@ -15,9 +15,12 @@
     "dayjs": "^1.11.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-download-link": "^2.3.0",
+    "react-drag-drop-files": "^2.3.8",
     "react-loader-spinner": "^5.3.4",
     "react-router-dom": "^6.4.4",
     "react-scripts": "5.0.1",
+    "react-spinner-overlay": "^0.1.33",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

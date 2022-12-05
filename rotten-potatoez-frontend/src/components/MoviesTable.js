@@ -122,7 +122,7 @@ const MoviesTable = () => {
         <>
           <Autocomplete
             disablePortal
-            id="combo-box-demo"
+            id="search-movie"
             options={movies}
             getOptionLabel={(option) => option.title}
             onChange={handleSearchChange}
