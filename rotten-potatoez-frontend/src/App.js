@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
+import Movie from "./pages/Movie";
 
 const theme = createTheme({
   palette: {
@@ -29,6 +30,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/movie/:id" element={<Movie />} />
           </Routes>
       </ThemeProvider>
     </BrowserRouter>

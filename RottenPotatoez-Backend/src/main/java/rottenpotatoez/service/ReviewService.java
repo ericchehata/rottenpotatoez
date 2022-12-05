@@ -67,8 +67,8 @@ public class ReviewService {
         if(reviewDTO.getId() == null && reviewRepository.existsByUserAndMovie(
                 Conversions.convertToModel(reviewDTO.getUser()),
                 Conversions.convertToModel(reviewDTO.getMovie()))){
-            throw new IllegalArgumentException("Review for user " + reviewDTO.getUser() +
-                    " and movie " + reviewDTO.getMovie() + " already exists");
+            throw new IllegalArgumentException("Review for user " + reviewDTO.getUser().getUsername() +
+                    " and movie " + reviewDTO.getMovie().getTitle() + " already exists");
         }
 
         if(reviewDTO.getId()!=null && !reviewRepository.existsById(reviewDTO.getId())){
