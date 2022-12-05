@@ -5,16 +5,10 @@ import { Box } from "@mui/system";
 
 const Profile = () => {
 
-    const [username, setUsername] = React.useState("");
-    const [firstName, setFirstName] = React.useState("");
-    const [lastName, setLastName] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const [dateOfBirth, setDateOfBirth] = React.useState("");
-    const [email, setEmail] = React.useState("");
+    const [user, setUser] = React.useState({});
     const [alert, setAlert] = React.useState(false);
     const [editMode, setEditMode] = React.useState(false);
-    const list = ["First Name", "Last Name", "Username", "Password", "Date of Birth", "Email"];
-    const [newUsername, setNewUsername] = React.useState("");
+    const list = ["First Name", "Last Name", "Password", "Date of Birth", "Email"];
     const [newFirstName, setNewFirstName] = React.useState("");
     const [newLastName, setNewLastName] = React.useState("");
     const [newPassword, setNewPassword] = React.useState("");
@@ -27,27 +21,30 @@ const Profile = () => {
     React.useEffect(() => {
         const username = localStorage.getItem("username");
           axios.get(`users/${username}`).then((res) => {
-            setUsername(res.data.username);
-            setFirstName(res.data.firstName);
-            setLastName(res.data.lastName);
-            setPassword(res.data.password);
-            setDateOfBirth(res.data.dateOfBirth);
-            setEmail(res.data.email);
+            setUser(res.data)
+
+            setNewFirstName(res.data.firstName);
+            setNewLastName(res.data.lastName);
+            setNewPassword(res.data.password);
+            setNewDateOfBirth(res.data.dateOfBirth);
+            setNewEmail(res.data.email);
         });
     }, [])
 
     React.useEffect(() => {
-        if (newUsername && newPassword && newFirstName && newLastName && newDateOfBirth && newEmail){
+        if (newPassword && newFirstName && newLastName && newDateOfBirth && newEmail){
             setDisable(false);
         }
         else{
             setDisable(true);
         }
-    }, [newDateOfBirth, newEmail, newFirstName, newLastName, newPassword, newUsername])
+    }, [newDateOfBirth, newEmail, newFirstName, newLastName, newPassword])
 
     const handleDelete = () => {
-        axios.delete(`users/${username}`).then((res) => {
+        axios.delete(`users/${user.username}`).then((res) => {
             setAlert(true);
+            localStorage.removeItem("username");
+            window.location.href = "/signin";
         });
     }
 
@@ -66,9 +63,6 @@ const Profile = () => {
         else if (field === "Last Name"){
             setNewLastName(text.target.value);
         }
-        else if (field === "Username"){
-            setNewUsername(text.target.value);
-        }
         else if (field === "Password"){
             setNewPassword(text.target.value);
         }
@@ -80,20 +74,39 @@ const Profile = () => {
         }
     }
 
+    const getValue = (field) => {
+        if (field === "First Name"){
+            return newFirstName;
+        }
+        else if (field === "Last Name"){
+            return newLastName;
+        }
+        else if (field === "Password"){
+            return newPassword;
+        }
+        else if (field === "Date of Birth"){
+            return newDateOfBirth;
+        }
+        else if (field === "Email"){
+            return newEmail;
+        }
+    }
+
     const handleEdit = () => {
         axios
       .patch(`users`, {
-        username: newUsername,
+        username: user.username,
         password: newPassword,
         firstName: newFirstName,
         lastName: newLastName,
         dateOfBirth: newDateOfBirth,
         email: newEmail,
-        isAdmin: false
+        isAdmin: user.isAdmin
       })
       .then((res) => {
-        localStorage.setItem("username", res.data.username);
-        window.location.href = "/";
+        setUser(res.data); 
+        setEditMode(false);
+        setError("");
       })
       .catch((err) => {
         setError(err.response.data);
@@ -113,33 +126,34 @@ const Profile = () => {
                                 required
                                 fullWidth
                                 label={field}
+                                value={getValue(field)}
                                 onChange={(text) => handleTextFieldChange(text, field)}
                             >
                             </TextField>
                             );
-                        })};
+                        })}
                 </ListItem>
             </Box>
             </>
             :
             <>
                 <ListItem>
-                    <ListItemText primary="Username" secondary={username} />
+                    <ListItemText primary="Username" secondary={user.username} />
                 </ListItem>
                 <ListItem>
-                    <ListItemText primary="Password" secondary={password} />
+                    <ListItemText primary="Password" secondary={user.password} />
                 </ListItem>
                 <ListItem>
-                    <ListItemText primary="First Name" secondary={firstName} />
+                    <ListItemText primary="First Name" secondary={user.firstName} />
                 </ListItem>
                 <ListItem>
-                    <ListItemText primary="Last Name" secondary={lastName} />
+                    <ListItemText primary="Last Name" secondary={user.lastName} />
                 </ListItem>
                 <ListItem>
-                    <ListItemText primary="Email" secondary={email} />
+                    <ListItemText primary="Email" secondary={user.email} />
                 </ListItem>
                 <ListItem>
-                    <ListItemText primary="Date of Birth" secondary={dateOfBirth} />
+                    <ListItemText primary="Date of Birth" secondary={user.dateOfBirth} />
                 </ListItem>
         </>}
         <Box textAlign='center'>
@@ -161,7 +175,7 @@ const Profile = () => {
                 </Button>
             </> 
             }
-            {alert && <Alert severity="error">You have successfully deleted your account.</Alert>}
+            {alert && <Alert severity="success">You have successfully deleted your account.</Alert>}
             {error && <Alert severity="error">{error}</Alert>}
         </Box>
         </>
