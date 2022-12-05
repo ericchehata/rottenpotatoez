@@ -442,4 +442,39 @@ public class UserServiceTests {
         }
     }
 
+    @Test
+    public void loginSuccess(){
+        try{
+            User user = userService.login(USER_USERNAME, USER_PASSWORD);
+            assertEquals(USER_USERNAME, user.getUsername());
+            assertEquals(USER_PASSWORD, user.getPassword());
+            assertEquals(USER_FIRST_NAME, user.getFirstName());
+            assertEquals(USER_LAST_NAME, user.getLastName());
+            assertEquals(USER_DATE_OF_BIRTH, user.getDateOfBirth());
+            assertEquals(USER_EMAIL, user.getEmail());
+            assertEquals(USER_PICTURE, user.getPicture());
+            assertEquals(USER_ADMIN, user.isAdmin());
+        }catch (IllegalArgumentException e) {
+            fail("Should not throw exception");
+        }
+    }
+
+    @Test
+    public void loginNotFound(){
+        try{
+            userService.login(VALID_USERNAME, USER_PASSWORD);
+        }catch (IllegalArgumentException e) {
+            assertEquals("Invalid username " + VALID_USERNAME, e.getMessage());
+        }
+    }
+
+    @Test
+    public void loginWrongPassword(){
+        try{
+            userService.login(USER_USERNAME, "wrong password");
+        }catch (IllegalArgumentException e) {
+            assertEquals("Incorrect password", e.getMessage());
+        }
+    }
+
 }
