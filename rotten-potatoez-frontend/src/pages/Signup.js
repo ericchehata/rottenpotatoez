@@ -7,6 +7,7 @@ import {
   Button,
   Container,
   CssBaseline,
+  FormControl,
   Grid,
   Link,
   TextField,
@@ -85,6 +86,7 @@ const Signup = () => {
       <Box
         sx={{
           marginTop: 8,
+          marginBottom: 5,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -133,10 +135,9 @@ const Signup = () => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <LocalizationProvider dateAdapter={AdapterDayjs} fullWidth>
+            <FormControl fullWidth required>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  required
-                  fullWidth
                   id="dateOfBirth"
                   label="Date of Birth"
                   name="dateOfBirth"
@@ -145,6 +146,7 @@ const Signup = () => {
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
+            </FormControl>
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -195,7 +197,7 @@ const Signup = () => {
           </Button>
           <Grid container>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/signin" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>
