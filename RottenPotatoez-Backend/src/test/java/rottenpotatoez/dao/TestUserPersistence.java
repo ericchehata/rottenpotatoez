@@ -12,6 +12,7 @@ import rottenpotatoez.model.*;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -45,6 +46,7 @@ public class TestUserPersistence {
         User user = new User(username, password, firstName, lastName, dateOfBirth, email, userPicture, isAdmin);
         userRepository.save(user);
 
+        if (userRepository.findByUsername(username).isEmpty()) fail("User not saved");
         user = userRepository.findByUsername(username).get();
 
         assertEquals(username, user.getUsername());

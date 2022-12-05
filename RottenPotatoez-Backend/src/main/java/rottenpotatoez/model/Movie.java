@@ -25,8 +25,6 @@ public class Movie {
     private UUID id;
     @NotBlank
     private String title;
-    @NotBlank
-    private String description;
     @Min(1)
     private int duration;
     @NotNull
