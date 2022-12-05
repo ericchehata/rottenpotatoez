@@ -14,13 +14,11 @@ import {
 } from "@mui/material";
 import {
   AccountCircle,
-  Menu as MenuIcon,
 } from "@mui/icons-material";
 import NavBarStyle from "../styles/NavBarStyle";
 import {ReactComponent as Logo} from "../icons/logo.svg";
 
 function NavBar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElAccountMenu, setAnchorElAccountMenu] = React.useState(null);
   const [isAuthenticated, setIsAuthenticated] = React.useState(false);
   const [isAdmin, setIsAdmin] = React.useState(false);
@@ -30,20 +28,12 @@ function NavBar() {
     if (username) {
       setIsAuthenticated(true);
       axios.get(`users/${username}`).then((res) => {
-        console.log(res.data);
         setIsAdmin(res.data.admin);
       });
     }
     // eslint-disable-next-line
   }, []);
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
 
   const handleAccountMenu = (event) => {
     setAnchorElAccountMenu(event.currentTarget);
@@ -58,16 +48,10 @@ function NavBar() {
     }
   };
 
-  const pages = isAdmin
-    ? [
-        { name: "Add movie", link: "/add-movie" },
-        { name: "My reviews", link: "/my-reviews" },
-      ]
-    : [{ name: "My reviews", link: "/my-reviews" }];
-
   const accountMenuPages = isAuthenticated
     ? [
         { name: "Profile", link: "/profile" },
+        { name: "My reviews", link: "/my-reviews" },
         { name: "Logout", link: "/signin" },
       ]
     : [
@@ -75,49 +59,13 @@ function NavBar() {
         { name: "Sign in", link: "/signin" },
       ];
 
+  if(isAdmin) accountMenuPages.splice(0, 0, { name: "Add movie", link: "/add-movie" });
+
   return (
     <AppBar position="static" color="primary">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Box sx={NavBarStyle.menuContainer}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={NavBarStyle.menu}
-            >
-              {pages.map((page) => (
-                <MenuItem
-                  component={Link}
-                  to={page.link}
-                  key={page.name}
-                  onClick={handleCloseNavMenu}
-                >
-                  <Typography textAlign="center">{page.name}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+          <Box sx={NavBarStyle.menuContainer}/>
           <SvgIcon component={Logo} sx={{mt:4, height:"60px", width:"60px"}} viewBox="0 0 100 100" />
           <Typography
             variant="h5"

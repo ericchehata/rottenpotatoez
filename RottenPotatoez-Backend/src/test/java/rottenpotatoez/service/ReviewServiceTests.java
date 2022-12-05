@@ -68,24 +68,22 @@ public class ReviewServiceTests {
 
     private static final UUID MOVIE_ID = UUID.randomUUID();
     private static final String MOVIE_TITLE = "Movie Title";
-    private static final String MOVIE_DESCRIPTION = "Movie Description";
     private static final int MOVIE_DURATION = 120;
     private static final LocalDate MOVIE_RELEASE_DATE = LocalDate.now();
     private static final String MOVIE_PICTURE = "Movie Picture";
     private static final String MOVIE_RATING = "G";
     private static final List<String> MOVIE_GENRES = List.of("Action", "Adventure");
-    private static final MovieDTO MOVIE_DTO = new MovieDTO(MOVIE_ID, MOVIE_TITLE, MOVIE_DESCRIPTION,
+    private static final MovieDTO MOVIE_DTO = new MovieDTO(MOVIE_ID, MOVIE_TITLE,
             MOVIE_DURATION, MOVIE_RELEASE_DATE, MOVIE_PICTURE, MOVIE_RATING, MOVIE_GENRES);
 
     private static final UUID MOVIE_ID_2 = UUID.randomUUID();
     private static final String MOVIE_TITLE_2 = "Movie Title 2";
-    private static final String MOVIE_DESCRIPTION_2 = "Movie Description 2";
     private static final int MOVIE_DURATION_2 = 120;
     private static final LocalDate MOVIE_RELEASE_DATE_2 = LocalDate.now();
     private static final String MOVIE_PICTURE_2 = "Movie Picture 2";
     private static final String MOVIE_RATING_2 = "R";
     private static final List<String> MOVIE_GENRES_2 = List.of("Comedy");
-    private static final MovieDTO MOVIE_DTO_2 = new MovieDTO(MOVIE_ID_2, MOVIE_TITLE_2, MOVIE_DESCRIPTION_2,
+    private static final MovieDTO MOVIE_DTO_2 = new MovieDTO(MOVIE_ID_2, MOVIE_TITLE_2,
             MOVIE_DURATION_2, MOVIE_RELEASE_DATE_2, MOVIE_PICTURE_2, MOVIE_RATING_2, MOVIE_GENRES_2);
 
 
@@ -199,8 +197,8 @@ public class ReviewServiceTests {
             reviewService.createOrEditReview(reviewDTO);
             fail("Should throw exception");
         }catch(IllegalArgumentException e){
-            assertEquals("Review for user " + reviewDTO.getUser() + " and movie " +
-                    reviewDTO.getMovie() + " already exists", e.getMessage());
+            assertEquals("Review for user " + reviewDTO.getUser().getUsername() + " and movie " +
+                    reviewDTO.getMovie().getTitle() + " already exists", e.getMessage());
         }
     }
 

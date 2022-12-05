@@ -16,6 +16,18 @@ const MoviesTableStyle = {
     },
     tableHeaderCell: {
       fontWeight: 700,
+    },
+    loadingContainer: {
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      height: "75vh",
+    },
+    search:{
+      width: "50%",
+      mr: "25%",
+      ml: "25%",
+      pt: "3rem",
     }
 }
 

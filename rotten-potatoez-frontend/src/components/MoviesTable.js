@@ -1,17 +1,22 @@
 import * as React from "react";
 import axios from "axios";
 import {
+  Autocomplete,
+  Link,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TablePagination,
   TableRow,
+  TextField,
   Paper,
 } from "@mui/material";
 import Genres from "./Genres";
 import EnhancedTableHead from "./EnhancedTableHead";
 import MoviesTableStyle from "../styles/MoviesTableStyle";
+import MovieRating from "./MovieRating";
+import { Bars } from "react-loader-spinner";
 
 const MoviesTable = () => {
   const [movies, setMovies] = React.useState([]);
@@ -25,14 +30,36 @@ const MoviesTable = () => {
     { label: "Duration (min)", property: "duration" },
     { label: "Release Date", property: "releaseDate" },
     { label: "Genres", property: "genres" },
+    { label: "Rating", property: "reviewsRating" },
   ];
 
   React.useEffect(() => {
-    axios.get("movies").then((response) => {
-      setMovies(response.data);
-    });
+    loadData();
     // eslint-disable-next-line
   }, []);
+
+  const handleSearchChange = (event, value) => {
+    window.location.href = `/movie/${value.id}`;
+  };
+
+  const loadData = async () => {
+    const moviesRes = await axios.get("movies");
+    const newMovies = await Promise.all(
+      moviesRes.data.map(async (movie) => {
+        movie.reviewsRating = 0;
+        const reviewsRes = await axios.get(`reviews/movie/${movie.id}`);
+        const reviews = reviewsRes.data.map((review) => {
+          movie.reviewsRating += review.rating;
+          return review;
+        });
+        movie.reviews = reviews;
+        if (reviewsRes.data.length)
+          movie.reviewsRating = movie.reviewsRating / reviewsRes.data.length;
+        return movie;
+      }),
+    );
+    setMovies(newMovies);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -78,46 +105,80 @@ const MoviesTable = () => {
   };
 
   return (
-      <Paper sx={MoviesTableStyle.container}>
-        <TableContainer>
-          <Table sx={MoviesTableStyle.table} aria-label="simple table">
-            <EnhancedTableHead
-              headCells={headCells}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
+    <>
+      {!movies.length ? (
+        <div style={MoviesTableStyle.loadingContainer}>
+          <Bars
+            height="80"
+            width="80"
+            color="primary"
+            ariaLabel="bars-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+          />
+        </div>
+      ) : (
+        <>
+          <Autocomplete
+            disablePortal
+            id="search-movie"
+            options={movies}
+            getOptionLabel={(option) => option.title}
+            onChange={handleSearchChange}
+            sx={MoviesTableStyle.search}
+            renderInput={(params) => (
+              <TextField {...params} label="Search Movie..." />
+            )}
+          />
+          <Paper sx={MoviesTableStyle.container}>
+            <TableContainer>
+              <Table sx={MoviesTableStyle.table} aria-label="simple table">
+                <EnhancedTableHead
+                  headCells={headCells}
+                  order={order}
+                  orderBy={orderBy}
+                  onRequestSort={handleRequestSort}
+                />
+                <TableBody>
+                  {stableSort(movies, getComparator(order, orderBy))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((movie) => (
+                      <TableRow key={movie.id} sx={MoviesTableStyle.tableRow}>
+                        <TableCell component="th" scope="row">
+                          <Link href={`/movie/${movie.id}`}>
+                            {movie.title} ({movie.releaseDate.split("-")[0]})
+                          </Link>
+                        </TableCell>
+                        <TableCell>{movie.duration}</TableCell>
+                        <TableCell>{movie.releaseDate}</TableCell>
+                        <TableCell>
+                          <Genres genres={movie.genres} />
+                        </TableCell>
+                        <TableCell>
+                          <MovieRating
+                            reviews={movie?.reviews}
+                            fromTable={true}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[10, 25, 50]}
+              component="div"
+              count={movies.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
             />
-            <TableBody>
-              {stableSort(movies, getComparator(order, orderBy))
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((movie) => (
-                  <TableRow
-                    key={movie.id}
-                    sx={MoviesTableStyle.tableRow}
-                  >
-                    <TableCell component="th" scope="row">
-                      {movie.title} ({movie.releaseDate.split("-")[0]})
-                    </TableCell>
-                    <TableCell>{movie.duration}</TableCell>
-                    <TableCell>{movie.releaseDate}</TableCell>
-                    <TableCell>
-                      <Genres genres={movie.genres} />
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 50]}
-          component="div"
-          count={movies.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Paper>
+          </Paper>
+        </>
+      )}
+    </>
   );
 };
 

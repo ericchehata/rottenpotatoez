@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -38,20 +39,20 @@ public class TestMoviePersistence {
     public void testMoviePersistence() {
         UUID movieId = UUID.randomUUID();
         String movieTitle = "movieTitle";
-        String movieDescription = "movieDescription";
         int duration = 120;
         LocalDate releaseDate = LocalDate.of(2021, 1, 1);
         String moviePicture = "moviePicture.png";
         Rating rating = Rating.G;
         List<Genre> genres = List.of(Genre.Action, Genre.Adventure);
-        Movie movie = new Movie(movieId, movieTitle, movieDescription, duration, releaseDate, moviePicture, rating, genres);
+        Movie movie = new Movie(movieId, movieTitle, duration, releaseDate, moviePicture, rating, genres);
         movieRepository.save(movie);
+
+        if(movieRepository.findById(movieId).isEmpty()) fail("Movie not saved");
 
         movie = movieRepository.findById(movieId).get();
 
         assertEquals(movieId, movie.getId());
         assertEquals(movieTitle, movie.getTitle());
-        assertEquals(movieDescription, movie.getDescription());
         assertEquals(duration, movie.getDuration());
         assertEquals(releaseDate, movie.getReleaseDate());
         assertEquals(moviePicture, movie.getPicture());
