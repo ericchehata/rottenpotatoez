@@ -14,11 +14,10 @@ import {
 import RateReviewIcon from '@mui/icons-material/RateReview';
 
 const CreateReviewForm = (props) => {
-  const [rating, setRating] = React.useState(0);
-  const [title, setTitle] = React.useState("");
-  const [description, setDescription] = React.useState("");
+  const [rating, setRating] = React.useState(props.review ? props.review.rating : 0);
+  const [title, setTitle] = React.useState(props.review ? props.review.title : "");
+  const [description, setDescription] = React.useState(props.review ? props.review.description : "");
   const [error, setError] = React.useState();
-
 
   const clearInputs = () => {
     setRating(0);
@@ -69,7 +68,7 @@ const CreateReviewForm = (props) => {
           <RateReviewIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Add Review
+          {props.review ? "Edit Review" : "Add Review"}
         </Typography>
         <Box sx={{ mt: 1 }}>
           <Rating name="half-rating" value={rating} onChange={handleRatingChange}/>
@@ -95,6 +94,19 @@ const CreateReviewForm = (props) => {
             value={description}
             onChange={handleDescriptionChange}
           />
+          {props.review 
+          ? 
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            disabled={!rating || !title || !description}
+            onClick={() => props.editReview(title, description, rating)}
+          >
+            Edit Review
+          </Button>
+          :
           <Button
             type="submit"
             fullWidth
@@ -104,7 +116,7 @@ const CreateReviewForm = (props) => {
             onClick={addReview}
           >
             Add Review
-          </Button>
+          </Button>}
           {error && (
             <Alert severity="error" sx={{ mt: 2 }}>
               {error}

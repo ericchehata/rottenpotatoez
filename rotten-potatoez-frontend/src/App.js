@@ -5,6 +5,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import Movie from "./pages/Movie";
+import MyReviews from "./pages/MyReviews";
 
 const theme = createTheme({
   palette: {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/movie/:id" element={<Movie />} />
+            <Route path="/my-reviews" element={<MyReviews />} />
           </Routes>
       </ThemeProvider>
     </BrowserRouter>
