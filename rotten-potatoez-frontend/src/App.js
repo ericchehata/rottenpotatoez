@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
 import Movie from "./pages/Movie";
 import MyReviews from "./pages/MyReviews";
 import CreateMovie from "./pages/CreateMovie";
@@ -32,6 +33,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/movie/:id" element={<Movie />} />
             <Route path="/my-reviews" element={<MyReviews />} />
             <Route path="/add-movie" element={<CreateMovie />} />
