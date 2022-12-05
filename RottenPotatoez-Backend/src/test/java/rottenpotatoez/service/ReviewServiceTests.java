@@ -197,8 +197,8 @@ public class ReviewServiceTests {
             reviewService.createOrEditReview(reviewDTO);
             fail("Should throw exception");
         }catch(IllegalArgumentException e){
-            assertEquals("Review for user " + reviewDTO.getUser() + " and movie " +
-                    reviewDTO.getMovie() + " already exists", e.getMessage());
+            assertEquals("Review for user " + reviewDTO.getUser().getUsername() + " and movie " +
+                    reviewDTO.getMovie().getTitle() + " already exists", e.getMessage());
         }
     }
 
