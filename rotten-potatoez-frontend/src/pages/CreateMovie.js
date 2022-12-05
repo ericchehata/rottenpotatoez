@@ -12,6 +12,7 @@ import {
   FormControl,
   Grid,
   InputLabel,
+  Link,
   MenuItem,
   Select,
   Stack,
@@ -277,6 +278,9 @@ const CreateMovie = () => {
           name="file"
           types={["xlsx"]}
         />
+        <Link href="/Sample.xlsx" download pt={2}>
+          Sample.xlsx
+        </Link>
         <Button
           type="submit"
           fullWidth
