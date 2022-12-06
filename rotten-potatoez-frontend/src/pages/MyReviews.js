@@ -12,6 +12,7 @@ const MyReviews = () => {
   }, []);
 
   const loadData = async () => {
+    if(!localStorage.getItem('username')) window.location.href = '/signin';
     const reviewsRes = await axios.get(
       `reviews/user/${localStorage.getItem("username")}`,
     );

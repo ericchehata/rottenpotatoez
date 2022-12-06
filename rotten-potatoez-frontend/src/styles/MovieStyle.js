@@ -12,7 +12,15 @@ const MovieStyle = {
     sectionContainer: {
         display: "flex",
         flexDirection: "row",
-    }
+    },
+    siginLinkContainer: {
+        mt: 2,
+        mb: 2,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+
+    },
 }
 
 export default MovieStyle

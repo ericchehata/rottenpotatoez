@@ -19,6 +19,7 @@ const Profile = () => {
 
 
     React.useEffect(() => {
+        if(!localStorage.getItem('username')) window.location.href = '/signin';
         const username = localStorage.getItem("username");
           axios.get(`users/${username}`).then((res) => {
             setUser(res.data)
@@ -125,6 +126,7 @@ const Profile = () => {
                             <TextField
                                 required
                                 fullWidth
+                                key={field}
                                 label={field}
                                 value={getValue(field)}
                                 onChange={(text) => handleTextFieldChange(text, field)}

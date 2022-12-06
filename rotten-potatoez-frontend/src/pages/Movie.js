@@ -1,7 +1,14 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Card, CardContent, CardHeader, Container, Typography } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Container,
+  Link,
+  Typography,
+} from "@mui/material";
 import MovieStyle from "../styles/MovieStyle";
 import Genres from "../components/Genres";
 import MovieRating from "../components/MovieRating";
@@ -22,10 +29,14 @@ const Movie = () => {
   const loadData = async () => {
     const movieRes = await axios.get(`movies/${id}`);
     const reviewsRes = await axios.get(`reviews/movie/${id}`);
-    const userRes = await axios.get(`users/${localStorage.getItem('username')}`);
     setMovie(movieRes.data);
     setReviews(reviewsRes.data);
-    setUser(userRes.data);
+    if (localStorage.getItem("username")) {
+      const userRes = await axios.get(
+        `users/${localStorage.getItem("username")}`,
+      );
+      setUser(userRes.data);
+    }
   };
 
   return (
@@ -53,10 +64,18 @@ const Movie = () => {
             <Container sx={MovieStyle.sectionContainer}>
               <Genres genres={movie?.genres} />
             </Container>
-            {<CreateReviewForm user={user} movie={movie} refresh={loadData}/>}
+            {user ? (
+              <CreateReviewForm user={user} movie={movie} refresh={loadData} />
+            ) : (
+              <Container sx={MovieStyle.siginLinkContainer}>
+                <Link href="/signin" variant="body2">
+                  {"Sign in to write a review"}
+                </Link>
+              </Container>
+            )}
             {reviews.map((review) => (
-                <Review key={review.id} review={review}/>
-              ))}
+              <Review key={review.id} review={review} />
+            ))}
           </CardContent>
         </Card>
       )}
