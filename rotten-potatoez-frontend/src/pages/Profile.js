@@ -102,7 +102,7 @@ const Profile = () => {
         lastName: newLastName,
         dateOfBirth: newDateOfBirth,
         email: newEmail,
-        isAdmin: user.isAdmin
+        isAdmin: user.admin
       })
       .then((res) => {
         setUser(res.data); 
